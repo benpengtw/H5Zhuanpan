@@ -2,14 +2,14 @@
 <head>
 <meta charset="utf8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="keywords" content="转盘抽奖">
-<meta name="description" content="转盘抽奖">
+<meta name="keywords" content="轉盤抽獎">
+<meta name="description" content="轉盤抽獎">
 <meta name="robots" content="all">
 <meta name="baiduspider" content="all">
 <meta name="googlebot" content="all">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
 <meta name="renderer" content="webkit">
-<title>转盘抽奖-旋转圆盘</title>
+<title>轉盤抽獎-旋轉圓盤</title>
 <style>
     body,html{margin:0px;padding:0px;}
     body{background-color:#333;padding:10px;}
@@ -21,7 +21,7 @@
     .part2 {
       
       transition: transform 10.5s;
-      transition-timing-function: cubic-bezier(0.42, 0, 0, 0.99); /*调整旋转速度和起始速率*/
+      transition-timing-function: cubic-bezier(0.42, 0, 0, 0.99); /*調整旋轉速度和起始速率*/
     }
 
 </style>
@@ -35,96 +35,173 @@
 </div>
 <script src="./jquery.min.js"></script>
 <script>
-// 测试抽奖的
-(function(){
-    var btn = $("#pointer"),
-        options = {
-        };
- 
-    // 奖品的角度列表
-    options.gifts = {
+//測試抽獎的
+var options = {}
+options.gifts = {
         "1":{
             id : "1",
-            name : "理财金2000元",
-            angleStart : -30,
+            name : "理財金2000元",
+            angleStart : -29,
             angleEnd : 30,
-            tips : "恭喜您获得理财金2000元~~"
+            tips : "恭喜您獲得理財金2000元~~"
         },
         "2":{
             id : "2",
-            name : "理财金1000元",
+            name : "理財金1000元",
             angleStart : 31,
             angleEnd : 90,
-            tips : "恭喜您获得理财金1000元~~"
+            tips : "恭喜您獲得理財金1000元~~"
         },
         "3":{
             id : "3",
-            name : "谢谢参与",
+            name : "謝謝參與",
             angleStart : 91,
             angleEnd : 150,
-            tips : "很遗憾没有能中奖，再试一次吧~"
+            tips : "很遺憾沒有能中獎，再試一次吧~"
         },
         "4":{
             id : "4",
-            name : "京东E卡",
+            name : "京東E卡",
             angleStart : 151,
             angleEnd : 210,
-            tips : "恭喜您抽中京东E卡一张~"
+            tips : "恭喜您抽中京東E卡一張~"
         },
         "5":{
             id : "5",
-            name : "理财金5200元",
+            name : "理財金5200元",
             angleStart : 211,
             angleEnd : 270,
-            tips : "恭喜您获得理财金5200元~~"
+            tips : "恭喜您獲得理財金5200元~~"
         },
         "6":{
             id : "6",
-            name : "谢谢参与",
+            name : "謝謝參與",
             angleStart : 271,
             angleEnd : 330,
-            tips : "很遗憾没有能中奖，再试一次吧~"
+            tips : "很遺憾沒有能中獎，再試一次吧~"
         }
     };
+function getRandom (n, m) {
+    var num = Math.floor(Math.random() * (m - n + 1) + n)
+    return num
+}
+const btn = document.querySelector('.rotate-pointer');
+btn.addEventListener('click', e => {
+					e.preventDefault();
+                    var base = 2160; //和transition: transform 10.5s;對應
+                    var result = getRandom(-30,330); // 隨機
 
-    // 获取[n,m]的随机整数
-    function getRandom (n, m) {
-        var num = Math.floor(Math.random() * (m - n + 1) + n)
-        return num
-    }
-    function _begin(){
+                    var _key = null; // 內定獎品id
 
-        var base = 2160; //和transition: transform 10.5s;对应
+                    if (_key) {
+                    result = getRandom(options.gifts[_key].angleStart,options.gifts[_key].angleEnd)
+                    }
 
-        var result = getRandom(-30,330); // 随机
-        
-        var _key = null; // 内定奖品id
+                    // result = 40
+                    var deg = (base+result)
 
-        if (_key) {
-          result = getRandom(options.gifts[_key].angleStart,options.gifts[_key].angleEnd)
-        }
+                    $(".part2").css({"transform":"rotate("+deg+"deg)"});
 
-        // result = 40
-        var deg = (base+result)
+                    $(".part2").on('transitionend',function(){
+                        console.log(result)
+                        for (var key in options.gifts) {
 
-        $(".part2").css({"transform":"rotate("+deg+"deg)"});
-
-        $(".part2").on('transitionend',function(){
-            console.log(result)
-            for (var key in options.gifts) {
-
-              if (options.gifts[key].angleStart <= result && result<=options.gifts[key].angleEnd) {
-
-                confirm(options.gifts[key].tips);
-                window.location.reload()
-
-              }
-            }
-        })
-    }
+                        if (options.gifts[key].angleStart <= result && result<=options.gifts[key].angleEnd) {
+                            confirm(options.gifts[key].tips);
+                            window.location.reload()
+                        }
+                        }
+                    });
+				}, {once: true});
+                //once: true避免按鈕被連點
+// (function(){
+//     var btn = $("#pointer"),
+//         options = {
+//         };
  
-    btn.on("click",_begin);
-})();
+//     // 獎品的角度列錶
+//     options.gifts = {
+//         "1":{
+//             id : "1",
+//             name : "理財金2000元",
+//             angleStart : -29,
+//             angleEnd : 30,
+//             tips : "恭喜您獲得理財金2000元~~"
+//         },
+//         "2":{
+//             id : "2",
+//             name : "理財金1000元",
+//             angleStart : 31,
+//             angleEnd : 90,
+//             tips : "恭喜您獲得理財金1000元~~"
+//         },
+//         "3":{
+//             id : "3",
+//             name : "謝謝參與",
+//             angleStart : 91,
+//             angleEnd : 150,
+//             tips : "很遺憾沒有能中獎，再試一次吧~"
+//         },
+//         "4":{
+//             id : "4",
+//             name : "京東E卡",
+//             angleStart : 151,
+//             angleEnd : 210,
+//             tips : "恭喜您抽中京東E卡一張~"
+//         },
+//         "5":{
+//             id : "5",
+//             name : "理財金5200元",
+//             angleStart : 211,
+//             angleEnd : 270,
+//             tips : "恭喜您獲得理財金5200元~~"
+//         },
+//         "6":{
+//             id : "6",
+//             name : "謝謝參與",
+//             angleStart : 271,
+//             angleEnd : 330,
+//             tips : "很遺憾沒有能中獎，再試一次吧~"
+//         }
+//     };
 
+//     // 獲取[n,m]的隨機整數
+//     function getRandom (n, m) {
+//         var num = Math.floor(Math.random() * (m - n + 1) + n)
+//         return num
+//     }
+//     function _begin(){
+
+//         var base = 2160; //和transition: transform 10.5s;對應
+
+//         var result = getRandom(-30,330); // 隨機
+        
+//         var _key = null; // 內定獎品id
+
+//         if (_key) {
+//           result = getRandom(options.gifts[_key].angleStart,options.gifts[_key].angleEnd)
+//         }
+
+//         // result = 40
+//         var deg = (base+result)
+
+//         $(".part2").css({"transform":"rotate("+deg+"deg)"});
+
+//         $(".part2").on('transitionend',function(){
+//             console.log(result)
+//             for (var key in options.gifts) {
+
+//               if (options.gifts[key].angleStart <= result && result<=options.gifts[key].angleEnd) {
+
+//                 confirm(options.gifts[key].tips);
+//                 window.location.reload()
+
+//               }
+//             }
+//         })
+//     }
+ 
+//     btn.on("click",_begin);
+// })();
 </script>
 </html>
